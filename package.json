@@ -1,0 +1,16 @@
+{
+  "name": "trellapp",
+  "version": "0.0.1",
+  "description": "get stuff from Trello API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nick Manton",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "moment": "^2.18.1",
+    "node-trello": "^1.1.2"
+  }
+}

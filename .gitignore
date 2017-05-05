@@ -1,0 +1,3 @@
+config/index.js
+*.sublime-*
+node_modules/
