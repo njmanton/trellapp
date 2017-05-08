@@ -1,0 +1,32 @@
+<section class="container">
+  <h1>{{ title }}</h1>
+  <div class="row">
+    <div class="col">
+      <div class="jumbotron"><h2 class="display-3">{{ total }}</h2><br /><p class="lead">measures</p></div>
+    </div>
+    <div class="col">
+      <p><a href="{{ page }}">All</a>: {{ gtotal }}</p>
+      {{#each depts }}
+      <p><a href="{{ page }}?d={{ @key }}">{{ @key }}</a>: {{ this }} </p>
+      {{/each }}
+    </div>  
+  </div>
+  <table class="table-striped table" id="cards">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Dept</th>
+        <th>Measure</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each data }}
+      <tr>
+        <td>{{ matches.[1] }}</td>
+        <td><a href="{{ url }}">{{ matches.[3] }}</a> {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}</td>
+        <td>{{ fdate }}</td>
+      </tr>
+      {{/each }}
+    </tbody>
+  </table>
+</section>

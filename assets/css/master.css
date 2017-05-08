@@ -1,0 +1,13 @@
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/css/theme.bootstrap_3.min.css);
+
+.jumbotron {
+  text-align: center;
+  font-weight: bold;
+  padding: 2rem;
+  background-color: #63c0ef;
+}
+
+.display-3 {
+  font-size: 7.5rem;
+}
