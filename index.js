@@ -7,7 +7,6 @@ const express         = require('express'),
       bars            = require('express-handlebars'),
       flash           = require('connect-flash'),
       pkg             = require('./package.json'),
-      config          = require('./config'),
       Trello          = require('trello');
 
 // handlebars as templating engine
@@ -32,7 +31,7 @@ app.use(flash());
 app.set('port', process.env.PORT || 1977);
 
 // create a new Trello object, with supplied credentials
-const trello = new Trello(config.api, config.token);
+const trello = new Trello(process.env.TRELLO_API, process.env.TRELLO_TOKEN);
 
 // routing
 require('./routes')(app, trello);

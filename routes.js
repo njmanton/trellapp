@@ -182,14 +182,8 @@ const routes = (app, trello) => {
   })
 
   // flow
-  app.get('/promise', (req, res) => {
-    const Trello = require('trello');
-    const trello = new Trello(config.api, config.token);
-    var cardsPromise = trello.getCardsOnList(config.snr_list);
-      cardsPromise.then((cards) => {
-        console.log(cards.length);
-        res.sendStatus(200);
-    })
+  app.get('/test', (req, res) => {
+
   })
 
 } 
