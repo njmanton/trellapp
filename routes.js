@@ -10,6 +10,10 @@ const re = /(\w+)\s(\d+)\]\s(.*)$/i;
 
 const routes = (app, trello) => {
 
+  app.get('/', (req, res) => {
+    res.redirect('/all/');
+  })
+
   // main page
   app.get('/all/:dept?', (req, res) => {
 
