@@ -2,7 +2,7 @@
 'use strict';
 
 const moment  = require('moment'),
-      Promise = require('bluebird'),
+      //Promise = require('bluebird'),
       config  = require('./config');
 
 // regex to split up the card title
@@ -307,40 +307,6 @@ const routes = (app, trello) => {
     
   })
 
-  app.get('/test', (req, res) => {
-
-    let cardList = trello.getCardsOnList('58e75fd54a3c6b1c00ebdf21');
-
-    cardList.then(cards => {
-      // build array of promises for checklist on each card
-      let chkLists = [];
-      cards.map(card => {
-        chkLists.push(trello.getChecklistsOnCard(card.id));
-
-      })
-      // collect all promises and resolve them
-      Promise.all(chkLists).then(chk => {
-        // find the checklist that corresponds to the card, and attch it to card object
-        cards.map(card => {
-          card.fdate = moment(card.due).format('MMM Do');
-          card.matches = re.exec(card.name) || [];
-          card.checklist = chk.find(list => { return list[0].idCard == card.id })[0];
-          card.checklist.checkItems.map(item => {
-            item.done = (item.state == 'complete');
-          })
-        })
-        res.render('checklist', {
-          title: 'test',
-          data: cards
-        })
-        //res.sendStatus(200);
-      })
-    })
-  })
-
-  app.get('/testcheck', (req, res) => {
-    trello.makeRequest('get', '/1/checklists/5901f2bafd6249d80559f273').then(c => { console.log(c); res.sendStatus(200); })
-  })
 } 
 
 module.exports = routes; 
