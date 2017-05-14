@@ -69,7 +69,7 @@ const routes = (app, trello) => {
       // iterate therough cards to build a array of departmental counts
       let depts = {};
       cards.map(card => {
-        card.fdate = moment(card.due).format('MMM Do YY');
+        card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
         let dept = card.matches[1];
         if (dept in depts) {
@@ -130,7 +130,7 @@ const routes = (app, trello) => {
       
       // iterate over cards to create labels and columns
       od.map(card => {
-        card.fdate = moment(card.due).format('MMM Do YY');
+        card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name);
         let dept = card.matches[1];
         // count each department
@@ -184,7 +184,7 @@ const routes = (app, trello) => {
       const gtotal = cards_this_week.length;
       let depts = {};        
       cards_this_week.map(card => { 
-        card.fdate = moment(card.due).format('MMM Do YY');
+        card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name);
 
         let dept = card.matches[1];
@@ -257,7 +257,6 @@ const routes = (app, trello) => {
       let lists = {};
       for (var x = 0; x < fcards.length; x++) {
         let list = config.lists[fcards[x].idList];
-        console.log(list);
         if (list in lists) {
           lists[list].push(fcards[x]);
         } else {
@@ -265,7 +264,6 @@ const routes = (app, trello) => {
         }
       }
 
-      console.log(lists);
       res.render('dept', {
         title: 'Measures for ' + req.params.dept,
         data: lists,
