@@ -2,7 +2,7 @@
 'use strict';
 
 const moment  = require('moment'),
-      //Promise = require('bluebird'),
+      Promise = require('bluebird'),
       config  = require('./config');
 
 // regex to split up the card title
