@@ -8,6 +8,7 @@ const express         = require('express'),
       flash           = require('connect-flash'),
       pkg             = require('./package.json'),
       basicAuth       = require('express-basic-auth'),
+      config          = require('./config'),
       Trello          = require('trello');
 
 // handlebars as templating engine
@@ -40,6 +41,9 @@ app.use(basicAuth({
   },
   challenge: true
 }))
+
+app.locals.lists = config.lists;
+app.locals.deptList = config.deptList;
 
 // create a new Trello object, with supplied credentials
 const trello = new Trello(process.env.TRELLO_API, process.env.TRELLO_TOKEN);

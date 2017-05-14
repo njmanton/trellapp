@@ -5,27 +5,31 @@
       <div class="jumbotron"><h2 class="display-3">{{ total }}</h2><br /><p class="lead">measures</p></div>
     </div>
     <div class="col">
-      <p><a href="{{ page }}">All</a>: {{ gtotal }}</p>
+      <p><a href="{{ link }}">All</a>: {{ gtotal }}</p>
       {{#each depts }}
-      <p><a href="{{ page }}?d={{ @key }}">{{ @key }}</a>: {{ this }} </p>
+      <p><a href="{{ ../link }}{{ @key }}">{{ @key }}</a>: {{ this }} </p>
       {{/each }}
     </div>  
   </div>
-  <table class="table-striped table" id="cards">
+  <table class="table-striped table" class="cards">
     <thead class="thead-inverse">
       <tr>
-        <th>Dept</th>
+        <th>Dept/Code</th>
         <th>Measure</th>
         <th>Due Date</th>
       </tr>
     </thead>
     <tbody>
       {{#each data }}
+      {{#if matches.[1] }}
       <tr>
-        <td>{{ matches.[1] }}</td>
-        <td><a href="{{ url }}">{{ matches.[3] }}</a> {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}</td>
+        <td>
+          <a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a>
+        </td>
+        <td>{{ matches.[3] }} {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}</td>
         <td>{{ fdate }}</td>
       </tr>
+      {{/if }}
       {{/each }}
     </tbody>
   </table>

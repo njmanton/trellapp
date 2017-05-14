@@ -14,11 +14,28 @@
             <a class="nav-link" href="/">All cards</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="/late">Overdue</a>
+            <a class="nav-link " href="/special/late">Overdue</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="/upcoming">Due this week</a>
+            <a class="nav-link " href="/special/upcoming">Due this week</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/" id="navListsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Lists</a>
+            <div class="dropdown-menu" aria-labelledby="navListsDD">
+              {{#each lists }}
+              <a href="/list/{{ @key }}" class="dropdown-item">{{ this }}</a>
+              {{/each }}
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/" id="navDeptsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Depts</a>
+            <div class="dropdown-menu" aria-labelledby="navDeptsDD">
+              {{#each deptList }}
+              <a href="/dept/{{ this }}" class="dropdown-item">{{ this }}</a>
+              {{/each }}
+            </div>
+          </li>          
+
         </ul>
       </div>
     </nav>

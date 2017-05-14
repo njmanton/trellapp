@@ -1,39 +1,76 @@
 //jshint node: true, esversion: 6
 'use strict';
 
-const moment = require('moment'),
-      config = require('./config');
+const moment  = require('moment'),
+      Promise = require('bluebird'),
+      config  = require('./config');
 
 // regex to split up the card title
 const re = /(\w+)\s(\d+)\]\s(.*)$/i;
 
 const routes = (app, trello) => {
 
-  // pattern
-  app.get('/some_route', (req, res) => {
-
-    t.get('/1/lists/<list id>/cards', (err, cards) => {
-      // cards holds array of card data from Trello API
-      // 
-      if (err) {
-        res.sendStatus(400);
-      } else {
-        res.sendStatus(200);
-      }      
-    })
-
-  })
-
   // main page
-  app.get('/', (req, res) => {
+  app.get('/:dept?', (req, res) => {
 
-    let cardList = trello.getCardsOnList(config.snr_list);
+    let cardList = trello.getCardsOnBoard(config.board);
+
     cardList.then(cards => {
 
       let depts = {};
-      cards.map(card => { 
+      cards.map(card => {
+        card.fdate = moment(card.due).format('MMM Do');
+        card.matches = re.exec(card.name) || [];
+        let dept = card.matches[1];
+        if (dept in depts) {
+          depts[dept]++;
+        } else {
+          depts[dept] = 1;
+        }
+        for (let x = 0; x < card.labels.length; x++) {
+          if (card.labels[x].color == 'purple') { // geography
+            card.geog = card.labels[x].name;
+          }
+          if (card.labels[x].color == 'red') {
+            card.pub = true;
+          }
+          if (card.labels[x].color == 'black') {
+            card.lab = card.labels[x].name;
+          }
+        }
+      })
+
+      let fcards = [];
+      if (req.params.dept) {
+        fcards = cards.filter(card => { return card.matches[1] == req.params.dept; });
+      }
+
+      res.render('list', {
+        title: 'All Measures',
+        data: (fcards.length) ? fcards : cards,
+        total: (fcards.length) ? fcards.length : cards.length,
+        gtotal: cards.length,
+        depts: depts,
+        link: '/'
+      })
+    })
+
+  });
+
+  app.get('/list/:list/:dept?', (req, res) => {
+
+    // get all cards in the list, plus the list details
+    let cardList = null, listInfo = null;
+    cardList = trello.getCardsOnList(req.params.list);
+    listInfo = trello.makeRequest('get', '/1/lists/' + req.params.list);
+    
+    // join the two promises to handle both together
+    Promise.join(cardList, listInfo, (cards, list) => {
+      // iterate therough cards to build a array of departmental counts
+      let depts = {};
+      cards.map(card => {
         card.fdate = moment(card.due).format('MMM Do YY');
-        card.matches = re.exec(card.name);
+        card.matches = re.exec(card.name) || [];
         let dept = card.matches[1];
         if (dept in depts) {
           depts[dept]++;
@@ -47,28 +84,32 @@ const routes = (app, trello) => {
           if (card.labels[x].color == 'red') {
             card.pub = true;
           }
+          if (card.labels[x].color == 'black') {
+            card.lab = card.labels[x].name;
+          }
         }
       })
 
       // if a filter was applied through the url, apply to cards array
       let fcards = [];
-      if (req.query.d) {
-        fcards = cards.filter(card => { return card.matches[1] == req.query.d; });
+      if (req.params.dept) {
+        fcards = cards.filter(card => { return card.matches[1] == req.params.dept; });
       }
-      res.render('main', {
-        title: 'All Measures',
+
+      res.render('list', {
+        title: 'Measures in ' + list.name,
         data: (fcards.length) ? fcards : cards,
         total: (fcards.length) ? fcards.length : cards.length,
         gtotal: cards.length,
         depts: depts,
-        page: req.url
+        link: '/list/' + list.id + '/'
       })        
     })
 
   })
 
   // overdue
-  app.get('/late', (req, res) => {
+  app.get('/special/late/:dept?', (req, res) => {
 
     let cardList = trello.getCardsOnList(config.snr_list);
     cardList.then(cards => {
@@ -109,23 +150,23 @@ const routes = (app, trello) => {
       })
 
       // if a filter was applied through the url, apply to cards array
-      if (req.query.d) {
-        od = od.filter(card => { return card.matches[1] == req.query.d; });
+      if (req.params.dept) {
+        od = od.filter(card => { return card.matches[1] == req.params.dept; });
       }
-      res.render('main', {
+      res.render('list', {
         title: 'Overdue Items',
         data: od,
         total: od.length,
         gtotal: gtotal,
         depts: depts,
-        page: req.url
+        link: '/special/late/'
       })        
     })
 
   })
 
   // cards due this week
-  app.get('/upcoming', (req, res) => {
+  app.get('/special/upcoming/:dept?', (req, res) => {
 
     let cardList = trello.getCardsOnList(config.snr_list);
     cardList.then(cards => {
@@ -165,16 +206,16 @@ const routes = (app, trello) => {
       })
 
       // if a filter was applied through the url, apply to cards array
-      if (req.query.d) {
-        cards_this_week = cards_this_week.filter(card => { return card.matches[1] == req.query.d; });
+      if (req.params.dept) {
+        cards_this_week = cards_this_week.filter(card => { return card.matches[1] == req.params.dept; });
       }       
-      res.render('main', {
+      res.render('list', {
         title: 'Measures due this week',
         data: cards_this_week,
         gtotal: gtotal,
         depts: depts,
         total: cards_this_week.length,
-        page: req.url
+        link: '/special/upcoming/'
       })      
 
     })
@@ -182,8 +223,56 @@ const routes = (app, trello) => {
   })
 
   // flow
-  app.get('/test', (req, res) => {
+  app.get('/dept/:dept', (req, res) => {
 
+    let cardList = trello.getCardsOnBoard(config.board);
+    const now = moment();
+
+    cardList.then(cards => {
+
+      cards.map(card => {
+        card.fdate = moment(card.due).format('MMM Do');
+        card.matches = re.exec(card.name) || [];
+        let dept = card.matches[1];
+        for (let x = 0; x < card.labels.length; x++) {
+          if (card.labels[x].color == 'purple') { // geography
+            card.geog = card.labels[x].name;
+          }
+          if (card.labels[x].color == 'red') {
+            card.pub = true;
+          }
+          if (card.labels[x].color == 'black') {
+            card.lab = card.labels[x].name;
+          }
+        }
+        card.overdue = (moment(card.due) < now && !card.dueComplete);
+      });
+
+      let fcards = [];
+      if (req.params.dept) {
+        fcards = cards.filter(card => { return card.matches[1] == req.params.dept; });
+      }
+
+      // split cards into an array for each Trello list
+      let lists = {};
+      for (var x = 0; x < fcards.length; x++) {
+        let list = config.lists[fcards[x].idList];
+        console.log(list);
+        if (list in lists) {
+          lists[list].push(fcards[x]);
+        } else {
+          lists[list] = [fcards[x]];
+        }
+      }
+
+      console.log(lists);
+      res.render('dept', {
+        title: 'Measures for ' + req.params.dept,
+        data: lists,
+        total: fcards.length
+      })
+    })
+    
   })
 
 } 
