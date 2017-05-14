@@ -1,6 +1,6 @@
 {
   "name": "trellapp",
-  "version": "0.0.1",
+  "version": "0.16.0",
   "description": "get stuff from Trello API",
   "main": "index.js",
   "repository": {
