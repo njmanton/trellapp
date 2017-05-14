@@ -11,3 +11,13 @@
 .display-3 {
   font-size: 7.5rem;
 }
+
+.pending {
+  color: red;
+  cursor: pointer;
+}
+
+.success {
+  color: green;
+  cursor: pointer;
+}

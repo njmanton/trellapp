@@ -12,6 +12,7 @@
       <tr>
         <th>Dept/Code</th>
         <th>Measure</th>
+        <th>Progress</th>
         <th>Due Date</th>
       </tr>
     </thead>
@@ -23,6 +24,11 @@
           <a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a>
         </td>
         <td>{{ matches.[3] }} {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}</td>
+        <td>
+        {{#each checklist.checkItems }}
+          <span class="{{#if done }}success{{ else }}pending{{/if }}" title="{{ name }}">◼︎</span>
+        {{/each }}
+        </td>
         <td>{{ fdate }} {{#if overdue }}<span class="warning">!</span>{{/if }} {{#if dueComplete }} <span>✔︎</span>{{/if }}</td>
       </tr>
       {{/if }}

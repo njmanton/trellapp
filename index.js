@@ -7,6 +7,7 @@ const express         = require('express'),
       bars            = require('express-handlebars'),
       flash           = require('connect-flash'),
       pkg             = require('./package.json'),
+      apicache        = require('apicache'),
       basicAuth       = require('express-basic-auth'),
       config          = require('./config'),
       Trello          = require('trello');
@@ -41,6 +42,10 @@ app.use(basicAuth({
   },
   challenge: true
 }))
+
+// setup a cache for the API calls to trello
+let cache = apicache.middleware;
+app.use(cache('1 minute'));
 
 app.locals.lists = config.lists;
 app.locals.deptList = config.deptList;

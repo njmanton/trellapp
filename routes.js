@@ -11,7 +11,7 @@ const re = /(\w+)\s(\d+)\]\s(.*)$/i;
 const routes = (app, trello) => {
 
   // main page
-  app.get('/:dept?', (req, res) => {
+  app.get('/all/:dept?', (req, res) => {
 
     let cardList = trello.getCardsOnBoard(config.board);
 
@@ -51,7 +51,7 @@ const routes = (app, trello) => {
         total: (fcards.length) ? fcards.length : cards.length,
         gtotal: cards.length,
         depts: depts,
-        link: '/'
+        link: '/all/'
       })
     })
 
@@ -227,6 +227,7 @@ const routes = (app, trello) => {
 
     let cardList = trello.getCardsOnBoard(config.board);
     const now = moment();
+    let chkLists = [];
 
     cardList.then(cards => {
 
@@ -248,31 +249,94 @@ const routes = (app, trello) => {
         card.overdue = (moment(card.due) < now && !card.dueComplete);
       });
 
+      // filter cards by department
       let fcards = [];
       if (req.params.dept) {
         fcards = cards.filter(card => { return card.matches[1] == req.params.dept; });
       }
 
-      // split cards into an array for each Trello list
-      let lists = {};
-      for (var x = 0; x < fcards.length; x++) {
-        let list = config.lists[fcards[x].idList];
-        if (list in lists) {
-          lists[list].push(fcards[x]);
-        } else {
-          lists[list] = [fcards[x]];
-        }
-      }
+      // get an array of Promise for checklist items from cards
+      fcards.map(card => { chkLists.push(trello.getChecklistsOnCard(card.id)); });
 
-      res.render('dept', {
-        title: 'Measures for ' + req.params.dept,
-        data: lists,
-        total: fcards.length
+      // handle the returned promises
+      Promise.all(chkLists).then(chk => {
+
+        // flatten the checklist array
+        let chks = [];
+        for (let x = 0; x < chk.length; x++) {
+          if (chk[x].length > 0) {
+            chks.push(chk[x][0]);
+          }
+        }
+
+        // map the fcards array to attach the correct checklist
+        fcards.map(card => {
+          card.checklist = chks.find(item => { return item.idCard == card.id }) || false;
+          if (card.checklist) {
+            card.checklist.checkItems.map(item => {
+              item.done = (item.state == 'complete');
+            })              
+          }
+        })
+
+         // split cards into an array for each Trello list
+        let lists = {};
+        for (var x = 0; x < fcards.length; x++) {
+          let list = config.lists[fcards[x].idList];
+          if (list in lists) {
+            lists[list].push(fcards[x]);
+          } else {
+            lists[list] = [fcards[x]];
+          }
+        }
+
+        res.render('dept', {
+          title: 'Measures for ' + req.params.dept,
+          data: lists,
+          total: fcards.length
+        })
+        //res.sendStatus(200);
+
       })
+
     })
     
   })
 
+  app.get('/test', (req, res) => {
+
+    let cardList = trello.getCardsOnList('58e75fd54a3c6b1c00ebdf21');
+
+    cardList.then(cards => {
+      // build array of promises for checklist on each card
+      let chkLists = [];
+      cards.map(card => {
+        chkLists.push(trello.getChecklistsOnCard(card.id));
+
+      })
+      // collect all promises and resolve them
+      Promise.all(chkLists).then(chk => {
+        // find the checklist that corresponds to the card, and attch it to card object
+        cards.map(card => {
+          card.fdate = moment(card.due).format('MMM Do');
+          card.matches = re.exec(card.name) || [];
+          card.checklist = chk.find(list => { return list[0].idCard == card.id })[0];
+          card.checklist.checkItems.map(item => {
+            item.done = (item.state == 'complete');
+          })
+        })
+        res.render('checklist', {
+          title: 'test',
+          data: cards
+        })
+        //res.sendStatus(200);
+      })
+    })
+  })
+
+  app.get('/testcheck', (req, res) => {
+    trello.makeRequest('get', '/1/checklists/5901f2bafd6249d80559f273').then(c => { console.log(c); res.sendStatus(200); })
+  })
 } 
 
 module.exports = routes; 
