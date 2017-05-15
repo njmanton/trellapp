@@ -8,8 +8,34 @@ const moment  = require('moment'),
 // regex to split up the card title
 const re = /(\w+)\s(\d+)\]\s(.*)$/i;
 
+// function to add custom labels to the handlebars data, based on Trello labels
+const getLabels = cards => {
+
+  return cards.map(card => {
+    for (let x = 0; x < card.labels.length; x++) {
+      if (card.labels[x].color == 'purple') { // geography
+        card.geog = card.labels[x].name;
+      }
+      if (card.labels[x].color == 'red') {
+        card.pub = true;
+      }
+      if (card.labels[x].color == 'black') {
+        card.lab = card.labels[x].name;
+      }
+      if (card.labels[x].color == 'pink') {
+        card.ons = 'ONS';
+      }
+      if (card.labels[x].color == 'orange') {
+        card.onspop = 'ONS pop';
+      }
+    }
+  })
+
+}
+
 const routes = (app, trello) => {
 
+  // redirect from app
   app.get('/', (req, res) => {
     res.redirect('/all/');
   })
@@ -22,6 +48,8 @@ const routes = (app, trello) => {
     cardList.then(cards => {
 
       let depts = {};
+      getLabels(cards);
+
       cards.map(card => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
@@ -30,23 +58,6 @@ const routes = (app, trello) => {
           depts[dept]++;
         } else {
           depts[dept] = 1;
-        }
-        for (let x = 0; x < card.labels.length; x++) {
-          if (card.labels[x].color == 'purple') { // geography
-            card.geog = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'red') {
-            card.pub = true;
-          }
-          if (card.labels[x].color == 'black') {
-            card.lab = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'pink') {
-            card.ons = 'ONS';
-          }
-          if (card.labels[x].color == 'orange') {
-            card.onspop = 'ONS pop';
-          }
         }
       })
 
@@ -78,6 +89,7 @@ const routes = (app, trello) => {
     Promise.join(cardList, listInfo, (cards, list) => {
       // iterate therough cards to build a array of departmental counts
       let depts = {};
+      getLabels(cards);
       cards.map(card => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
@@ -86,26 +98,6 @@ const routes = (app, trello) => {
           depts[dept]++;
         } else {
           depts[dept] = 1;
-        }
-        for (var x = 0; x < card.labels.length; x++) {
-          if (card.labels[x].color == 'purple') { // geography
-            card.geog = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'red') {
-            card.pub = true;
-          }
-          if (card.labels[x].color == 'black') {
-            card.lab = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'black') {
-            card.lab = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'pink') {
-            card.ons = 'ONS';
-          }
-          if (card.labels[x].color == 'orange') {
-            card.onspop = 'ONS pop';
-          }
         }
       })
 
@@ -146,8 +138,9 @@ const routes = (app, trello) => {
       
       // object to hold dept counts
       let depts = {};
+      getLabels(od);
       
-      // iterate over cards to create labels and columns
+      //iterate over cards to create labels and columns
       od.map(card => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name);
@@ -158,14 +151,6 @@ const routes = (app, trello) => {
         } else {
           depts[dept] = 1;
         }
-          for (let x = 0; x < card.labels.length; x++) {
-            if (card.labels[x].color == 'purple') { // geography
-              card.geog = card.labels[x].name;
-            }
-            if (card.labels[x].color == 'red') {
-              card.pub = true;
-            }
-          }
       })
 
       // if a filter was applied through the url, apply to cards array
@@ -200,8 +185,11 @@ const routes = (app, trello) => {
           cards_this_week.push(cards[y]);
         } 
       }
+
       const gtotal = cards_this_week.length;
-      let depts = {};        
+      let depts = {};
+      getLabels(cards_this_week);  
+
       cards_this_week.map(card => { 
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name);
@@ -212,15 +200,6 @@ const routes = (app, trello) => {
           depts[dept]++;
         } else {
           depts[dept] = 1;
-        }
-
-        for (var x = 0; x < card.labels.length; x++) {
-          if (card.labels[x].color == 'purple') { // geography
-            card.geog = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'red') {
-            card.pub = true;
-          }
         }
       })
 
@@ -250,21 +229,11 @@ const routes = (app, trello) => {
 
     cardList.then(cards => {
 
+      getLabels(cards);
       cards.map(card => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
         let dept = card.matches[1];
-        for (let x = 0; x < card.labels.length; x++) {
-          if (card.labels[x].color == 'purple') { // geography
-            card.geog = card.labels[x].name;
-          }
-          if (card.labels[x].color == 'red') {
-            card.pub = true;
-          }
-          if (card.labels[x].color == 'black') {
-            card.lab = card.labels[x].name;
-          }
-        }
         card.overdue = (moment(card.due) < now && !card.dueComplete);
       });
 
