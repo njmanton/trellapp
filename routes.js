@@ -41,6 +41,12 @@ const routes = (app, trello) => {
           if (card.labels[x].color == 'black') {
             card.lab = card.labels[x].name;
           }
+          if (card.labels[x].color == 'pink') {
+            card.ons = 'ONS';
+          }
+          if (card.labels[x].color == 'orange') {
+            card.onspop = 'ONS pop';
+          }
         }
       })
 
@@ -90,6 +96,15 @@ const routes = (app, trello) => {
           }
           if (card.labels[x].color == 'black') {
             card.lab = card.labels[x].name;
+          }
+          if (card.labels[x].color == 'black') {
+            card.lab = card.labels[x].name;
+          }
+          if (card.labels[x].color == 'pink') {
+            card.ons = 'ONS';
+          }
+          if (card.labels[x].color == 'orange') {
+            card.onspop = 'ONS pop';
           }
         }
       })
