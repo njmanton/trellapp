@@ -23,7 +23,14 @@
         <td>
           <a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a>
         </td>
-        <td>{{ matches.[3] }} {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}</td>
+        <td>
+        {{ matches.[3] }} 
+        {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} 
+        {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}
+        {{#if lab }}<span style="background-color: black;" class="badge">{{ lab }}</span> {{/if }}
+        {{#if ons }}<span style="background-color: orange;" class="badge">{{ ons }}</span> {{/if }}
+        {{#if onspop }}<span style="background-color: #ff80ce;" class="badge">{{ onspop }}</span> {{/if }}
+        </td>
         <td>
         {{#each checklist.checkItems }}
           <span class="{{#if done }}success{{ else }}pending{{/if }}" title="{{ name }}">◼︎</span>
