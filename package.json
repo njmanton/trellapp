@@ -1,6 +1,6 @@
 {
   "name": "trellapp",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "get stuff from Trello API",
   "engines": {
     "node": "7.10.0"
