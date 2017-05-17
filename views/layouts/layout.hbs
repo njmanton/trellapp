@@ -35,7 +35,14 @@
               {{/each }}
             </div>
           </li>          
-
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/" id="navCheckDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Checklist</a>
+            <div class="dropdown-menu" aria-labelledby="navCheckDD">
+              {{#each checklist }}
+              <a href="/checklist/{{ @key }}" class="dropdown-item">{{ this }}</a>
+              {{/each }}
+            </div>
+          </li>   
         </ul>
       </div>
     </nav>

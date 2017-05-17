@@ -18,3 +18,5 @@ exports.lists = {
 };
 
 exports.deptList = ['DH', 'DWP', 'DCMS', 'DCLG', 'HO', 'MoJ', 'MOD', 'DfT', 'BEIS', 'CO', 'DEFRA', 'DfE'];
+
+exports.checklist = ['Data received', 'Commentary received', 'Metadata received', 'Data checked', 'Commentary checked', 'Metadata checked', 'Headline provided', 'Working headline'];

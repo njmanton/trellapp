@@ -3,6 +3,7 @@
 
 const moment  = require('moment'),
       Promise = require('bluebird'),
+      chalk   = require('chalk'),
       config  = require('./config');
 
 // regex to split up the card title
@@ -117,7 +118,7 @@ const routes = (app, trello) => {
       })        
     })
 
-  })
+  });
 
   // overdue
   app.get('/special/late/:dept?', (req, res) => {
@@ -167,7 +168,7 @@ const routes = (app, trello) => {
       })        
     })
 
-  })
+  });
 
   // cards due this week
   app.get('/special/upcoming/:dept?', (req, res) => {
@@ -218,7 +219,7 @@ const routes = (app, trello) => {
 
     })
 
-  })
+  });
 
   // flow
   app.get('/dept/:dept', (req, res) => {
@@ -277,20 +278,51 @@ const routes = (app, trello) => {
             lists[list] = [fcards[x]];
           }
         }
-
         res.render('dept', {
           title: 'Measures for ' + req.params.dept,
           data: lists,
           total: fcards.length
         })
-        //res.sendStatus(200);
 
       })
 
     })
     
+  });
+
+  app.get('/checklist/:item', (req, res) => {
+
+    trello.makeRequest('get', '/1/boards/' + config.board + '/checklists').then(chks => {
+
+      let completedLists = chks.filter(chk => {
+        return (chk.name == 'Progress checklist' && chk.checkItems[req.params.item].state == 'complete');
+      })
+
+      let cards = [];
+      completedLists.map(chk => { cards.push(trello.getCard(config.board, chk.idCard)); });
+
+      Promise.all(cards).then(cards => {
+
+        completedLists.map(list => {
+          list.card = cards.find(item => { return item.idChecklists == list.id; });
+          if (list.card) {
+            list.card.matches = re.exec(list.card.name);
+          }
+        })
+
+        res.render('check', {
+          title: 'Measures with completed checkbox: ' + config.checklist[req.params.item],
+          data: completedLists,
+          total: completedLists.length
+        })        
+      })
+
+
+
+    })
+
   })
 
-} 
+}
 
 module.exports = routes; 
