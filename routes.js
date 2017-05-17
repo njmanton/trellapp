@@ -62,6 +62,9 @@ const routes = (app, trello) => {
         }
       })
 
+      // don't include cards in out of scope list
+      cards = cards.filter(c => { return c.idList != '58e75ed1a39ca5a7fd801b76'; });
+
       let fcards = [];
       if (req.params.dept) {
         fcards = cards.filter(card => { return card.matches[1] == req.params.dept; });
@@ -128,7 +131,7 @@ const routes = (app, trello) => {
       
       // filter cards to get overdue items
       const now = moment();
-      let od = cards.filter(card => { return (now > moment(card.due) && !card.dueComplete ) });
+      let od = cards.filter(card => { return (now > moment(card.due) && !card.dueComplete && card.idList != '58e75ed1a39ca5a7fd801b76') });
 
       // sort cards on basis of due date
       od.sort((a, b) => {
