@@ -49,6 +49,7 @@ app.use(cache('1 minute'));
 
 app.locals.lists = config.lists;
 app.locals.deptList = config.deptList;
+app.locals.checklist = config.checklist;
 
 // create a new Trello object, with supplied credentials
 const trello = new Trello(process.env.TRELLO_API, process.env.TRELLO_TOKEN);

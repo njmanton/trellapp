@@ -1,0 +1,27 @@
+<section class="container">
+  <h3>{{ title }}</h3>
+  <div class="row">
+    <div class="col">
+      <div class="jumbotron"><h2 class="display-3">{{ total }}</h2><br /><p class="lead">measures</p></div>
+    </div>
+  </div>
+  <table class="table-striped table">
+    <thead>
+      <tr>
+        <th>Dept/Code</th>
+        <th>Measure</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each data }}
+    {{#if this.card.name }}
+      <tr>
+        <td><a href="{{ this.card.url }}" target="_blank">{{ this.card.matches.[1] }} {{ this.card.matches.[2] }}</a></td>
+        <td>{{ this.card.matches.[3] }}</td>
+      </tr>
+    {{/if }}
+    {{/each }}      
+    </tbody>
+  </table>
+
+</section>
