@@ -11,3 +11,19 @@ To use
 3. ~~create an `index.js` file in config to hold and export Trello API key & user token (I've also added board/list IDs)~~ credentials now moved to environment variables. Trello object IDs are still in the config file. 
 4. `node index` from the root folder to start the server, and view from `localhost:1977`
 
+Versions
+
+_0.19.0_
+Checklist view now splits cards by list
+
+_0.18.1_
+Add correct class to table headers for checklist view
+
+_0.18.0_
+Filter out out-of-scope cards from all/overdue views
+
+_0.17.0_
+add views for cards with certain checklist boxes completed
+
+_0.16.0_
+add additional labels to card views

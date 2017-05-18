@@ -313,9 +313,20 @@ const routes = (app, trello) => {
           }
         })
 
+        // split cards into an array for each Trello list
+        let lists = {};
+        for (var x = 0; x < completedLists.length; x++) {
+          let list = config.lists[completedLists[x].card.idList] || null;
+          if (list in lists) {
+            lists[list].push(completedLists[x]);
+          } else {
+            lists[list] = [completedLists[x]];
+          }
+        }
+
         res.render('check', {
           title: 'Measures with completed checkbox: ' + config.checklist[req.params.item],
-          data: completedLists,
+          data: lists,
           total: completedLists.length
         })        
       })
