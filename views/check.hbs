@@ -5,6 +5,8 @@
       <div class="jumbotron"><h2 class="display-3">{{ total }}</h2><br /><p class="lead">measures</p></div>
     </div>
   </div>
+  {{#each data }}
+  <h3>{{ @key }}</h3>
   <table class="table-striped table">
     <thead class="thead-inverse">
       <tr>
@@ -13,15 +15,16 @@
       </tr>
     </thead>
     <tbody>
-    {{#each data }}
-    {{#if this.card.name }}
+    {{#each this }}
+    {{#if card.name }}
       <tr>
-        <td><a href="{{ this.card.url }}" target="_blank">{{ this.card.matches.[1] }} {{ this.card.matches.[2] }}</a></td>
-        <td>{{ this.card.matches.[3] }}</td>
+        <td><a href="{{ card.url }}" target="_blank">{{ card.matches.[1] }} {{ card.matches.[2] }}</a></td>
+        <td>{{ card.matches.[3] }}</td>
       </tr>
     {{/if }}
     {{/each }}      
     </tbody>
   </table>
+  {{/each }}
 
 </section>
