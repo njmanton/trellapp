@@ -29,6 +29,9 @@ const getLabels = cards => {
       if (card.labels[x].color == 'orange') {
         card.onspop = 'ONS pop';
       }
+      if (card.labels[x].color == 'lime') {
+        card.pri = true;
+      }
     }
   })
 
@@ -330,8 +333,6 @@ const routes = (app, trello) => {
           total: completedLists.length
         })        
       })
-
-
 
     })
 
