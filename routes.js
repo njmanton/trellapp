@@ -353,7 +353,14 @@ const routes = (app, trello) => {
       // attach matching checklist to card object
       cards.map(card => {
         card.chk = chks.find(chk => { return chk.idCard == card.id }).checkItems;
-        card.chk.sort((a, b) => { return a.name > b.name; });
+        card.chk.sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+        })
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
 
@@ -383,11 +390,14 @@ const routes = (app, trello) => {
         data: lists
       })
 
-
-      //res.send('<pre>' + JSON.stringify(cards.slice(0,4), null, 2) + '</pre>');
-      //res.sendStatus(200);
     })
 
+  })
+
+  app.get('/test', (req, res) => {
+    trello.getChecklistsOnCard('xF73nryM').then(chk => {
+      res.send('<pre>' + JSON.stringify(chk, null, 2) + '</pre>');
+    })
   })
 
 
