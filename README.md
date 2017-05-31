@@ -13,6 +13,9 @@ To use
 
 Versions
 
+_0.20.0_
+Add commentary progress view
+
 _0.19.0_
 Checklist view now splits cards by list
 
