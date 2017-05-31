@@ -364,8 +364,8 @@ const routes = (app, trello) => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
 
-        if (~card.idMembers.indexOf('590b43492cb03c7eb4e116d8')) card.laura = true;
-        if (~card.idMembers.indexOf('5746bf8b473f1feca8d7dcd3')) card.michael = true;
+        if (~card.idMembers.indexOf('590b43492cb03c7eb4e116d8')) card.michael = true;
+        if (~card.idMembers.indexOf('5746bf8b473f1feca8d7dcd3')) card.laura = true;
 
         if (card.chk[1].state == 'complete' && card.chk[5].state == 'incomplete') { 
           card.category = 'Backlog';
