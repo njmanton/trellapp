@@ -336,7 +336,60 @@ const routes = (app, trello) => {
 
     })
 
+  }),
+
+  app.get('/progress', (req, res) => {
+
+    let cards = trello.makeRequest('get', '/1/lists/58e75fd54a3c6b1c00ebdf21/cards', { fields: ['name', 'idMembers', 'due', 'url', 'labels'] }),
+        chks  = trello.makeRequest('get', '/1/boards/' + config.board + '/checklists');
+
+    Promise.join(cards, chks, (cards, chks) => {
+
+      chks = chks.filter(chk => {
+        return (chk.name == 'Progress checklist');
+      })
+
+      let lists = { backlog: [], progress: [], check: [] };
+      // attach matching checklist to card object
+      cards.map(card => {
+        card.chk = chks.find(chk => { return chk.idCard == card.id }).checkItems;
+        card.chk.sort((a, b) => { return a.name > b.name; });
+        card.fdate = moment(card.due).format('MMM Do');
+        card.matches = re.exec(card.name) || [];
+
+        if (~card.idMembers.indexOf('590b43492cb03c7eb4e116d8')) card.laura = true;
+        if (~card.idMembers.indexOf('5746bf8b473f1feca8d7dcd3')) card.michael = true;
+
+        if (card.chk[1].state == 'complete' && card.chk[5].state == 'incomplete') { 
+          card.category = 'Backlog';
+          lists.backlog.push(card);
+        };
+        if (card.chk[5].state == 'complete' && card.chk[7].state == 'incomplete') { 
+          card.category = 'In Progress';
+          lists.progress.push(card);
+        };
+        if (card.chk[7].state == 'complete' && card.chk[8].state == 'incomplete') { 
+          card.category = 'Analyst check';
+          lists.check.push(card);
+        };
+      })
+
+      getLabels(lists.backlog);
+      getLabels(lists.progress);
+      getLabels(lists.check);
+
+      res.render('progress', {
+        title: 'Commentary Progress', 
+        data: lists
+      })
+
+
+      //res.send('<pre>' + JSON.stringify(cards.slice(0,4), null, 2) + '</pre>');
+      //res.sendStatus(200);
+    })
+
   })
+
 
 }
 

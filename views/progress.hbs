@@ -1,0 +1,40 @@
+<section class="container">
+  <h3>{{ title }}</h3>
+
+  {{#each data }}
+  <h3>{{ @key }}</h3>
+
+    <table class="table table-striped" class="cards">
+      <thead class="thead-inverse">
+        <tr>
+          <th>Dept/Code</th>
+          <th>Measure</th>
+          <th>Due Date</th>
+          <th>Assigned</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this }}
+        <tr>
+          <td><a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a></td>
+          <td>
+          {{ matches.[3] }}
+          {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} 
+          {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}
+          {{#if lab }}<span style="background-color: black;" class="badge">{{ lab }}</span> {{/if }}
+          {{#if ons }}<span style="background-color: orange;" class="badge">{{ ons }}</span> {{/if }}
+          {{#if onspop }}<span style="background-color: #ff80ce;" class="badge">{{ onspop }}</span> {{/if }}
+          {{#if pri }}<span style="background-color: lime;" class="badge">A</span>{{/if }}
+          </td>
+          <td>{{ fdate }}</td>
+          <td>
+          {{#if laura }} <img style="display: inline;" src="https://trello-avatars.s3.amazonaws.com/a5c953da116c2046966e24ba6b7cbfed/30.png" alt="Laura"> {{/if }} 
+          {{#if michael }}<img style="display: inline;" src='https://trello-avatars.s3.amazonaws.com/884931350817a1188771db6a9b9818ec/30.png' alt="Michael" />{{/if }}
+          </td>
+        </tr>
+        {{/each }}
+      </tbody>
+    </table>
+  {{/each }}
+
+</section>
