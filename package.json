@@ -26,6 +26,8 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.2",
     "moment": "^2.18.1",
-    "trello": "^0.7.0"
+    "node-cron": "^1.2.0",
+    "trello": "^0.7.0",
+    "winston": "^2.3.1"
   }
 }

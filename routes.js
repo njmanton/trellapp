@@ -4,6 +4,7 @@
 const moment  = require('moment'),
       Promise = require('bluebird'),
       chalk   = require('chalk'),
+      winston = require('winston'),
       config  = require('./config');
 
 // regex to split up the card title
@@ -394,10 +395,34 @@ const routes = (app, trello) => {
 
   })
 
-  app.get('/test', (req, res) => {
-    trello.getChecklistsOnCard('xF73nryM').then(chk => {
-      res.send('<pre>' + JSON.stringify(chk, null, 2) + '</pre>');
+  app.get('/chart', (req, res) => {
+    
+    var fs = require('fs'),
+        readline = require('readline');
+
+    var rd = readline.createInterface({
+        input: fs.createReadStream('./progress.log'),
+        //output: process.stdout,
+        console: false
+    });
+
+    rd.on('line', line => {
+      let ln = JSON.parse(line);
+      console.log(ln.message);
+    });
+
+    let uploads = trello.getCardsOnList('58e76046893294e85be058ab'),
+        signoffs = trello.getCardsOnList('58e7604e6dbfb65b96f3a1f6');
+
+    Promise.join(uploads, signoffs, (uploads, signoffs) => {
+      res.render('chart', {
+        title: 'Measure Upload Progress',
+        progress: []
+      })      
     })
+
+
+
   })
 
 
