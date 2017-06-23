@@ -7,7 +7,6 @@ const express         = require('express'),
       bars            = require('express-handlebars'),
       flash           = require('connect-flash'),
       pkg             = require('./package.json'),
-      winston         = require('winston'),
       apicache        = require('apicache'),
       basicAuth       = require('express-basic-auth'),
       config          = require('./config'),
@@ -47,21 +46,6 @@ app.use(basicAuth({
   challenge: true
 }))
  
-let logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.File)({ filename: 'progress.log', level: 'info', timestamp: false })
-  ]
-});
-
-// winston.add(
-//   winston.transports.File, {
-//     filename: 'progress.log',
-//     level: 'info',
-//     json: false,
-//     eol: '\n',
-//     timestamp: false
-//   }
-// )
 // setup a cache for the API calls to trello
 let cache = apicache.middleware;
 app.use(cache('1 minute'));
@@ -74,7 +58,7 @@ cron.schedule('0 1 * * *', () => {
       signoff = trello.getCardsOnList('58e7604e6dbfb65b96f3a1f6');
 
   Promise.join(upload, signoff, (u, s) => {
-    logger.info(moment().format('YYYY-MM-DD'), u.length, s.length);
+    
   })
   
 });

@@ -1,64 +1,133 @@
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<section>
-  <h3>{{ title }}</h3>
-  <div id="container"></div>
+{{!-- <script src="https://code.highcharts.com/highcharts.js"></script>
+ --}}<section>
+  <h1>{{ title }}</h1>
+  <button id="playButton" type="button" class="btn btn-default btn-xs">
+    <span>play</span>
+  </button>
+  <button id="pauseButton" type="button" class="btn btn-default btn-xs">
+    <span>pause</span>
+  </button>
+  <div class="row">
+  {{#each lists }}
+    <div class="col jumbotron jumbotron-fluid">
+      <h2 class="display-3">{{ this.length }}</h2>
+      <p class="lead">{{ @key }}</p>
+    </div>
+  {{/each }}
+  </div>
+
+  <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="10000">
+    <ol class="carousel-indicators">
+      {{#each lists }}
+      <li data-target="#carousel" data-slide-to="{{ @index }}" class="active">{{ this.length }}</li>
+      {{/each }}
+    </ol>
+    <div class="carousel-inner" role="listbox">
+      {{#each lists }}
+      <div class="carousel-item {{#if @first }}active{{/if }}">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Measure</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this }}
+            <tr>
+              <td><a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a></td>
+              <td>{{ matches.[3] }}</td>
+              <td>
+                {{#each people }}
+                {{#if url }}
+                <img style="display: inline;" src="https://trello-avatars.s3.amazonaws.com/{{ url }}/30.png" alt="{{ fullName }}">
+                {{ else }}
+                <span class="badge badge-info" style="height: 30px" title="{{ fullName }}">{{ initials }}</span>
+                {{/if }}
+                {{/each }}
+              </td>
+            </tr>
+            {{/each }}
+          </tbody>
+        </table>
+      </div>
+      {{/each }}
+    </div>
+    <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
 </section>
 
-<script>
-  Highcharts.chart('container', {
-    title: {
-      text: null
-    },
-    yAxis: {
-        title: {
-            text: 'Number of Measures'
-        }
-    },
-    xAxis: {
-      type: 'datetime'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-    },
-    series: [{
-        name: 'Stretch Upload',
-        connectNulls: true,
-        data: [10,null,null,12,16,20,25,30,null,null,36,43,52,60,70,null,null,77,86,97,108,120,null,null,130,142,155,170,185,null,null,196,204,212,212,212],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }, {
-        name: 'Min Upload',
-        connectNulls: true,
-        data: [8,null,null,9,11,14,17,20,null,null,23,27,32,36,43,null,null,47,52,57,62,68,null,null,74,80,87,93,100,null,null,106,112,112,112,112],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }, {
-        name: 'Current Upload',
-        connectNulls: true,
-        data: [],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }, {
-        name: 'Strech sign-off',
-        connectNulls: true,
-        data: [0,null,null,3,7,11,15,20,null,null,25,30,36,43,50,null,null,56,63,71,80,90,null,null,100,111,124,137,150,null,null,162,175,187,200,212],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }, {
-        name: 'Min sign-off',
-        connectNulls: true,
-        data: [0,null,null,1,4,6,8,12,null,null,13,15,19,22,26,null,null,29,32,36,40,45,null,null,49,53,58,64,70,null,null,78,87,100,112,112],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }, {
-        name: 'Current sign-off',
-        connectNulls: true,
-        data: [],
-        pointStart: Date.UTC(2017, 5, 9),
-        pointInterval: 24 * 3600 * 1000 // one day
-    }]
+<style>
+  .carousel-inner { height: 1200px; }
+  .hilite { background-color: #f0a93e; }
+</style>
 
-});
+<script>
+
+
+//   Highcharts.chart('container', {
+//     title: {
+//       text: null
+//     },
+//     yAxis: {
+//         title: {
+//             text: 'Number of Measures'
+//         }
+//     },
+//     xAxis: {
+//       type: 'datetime'
+//     },
+//     legend: {
+//         layout: 'vertical',
+//         align: 'right',
+//         verticalAlign: 'middle'
+//     },
+//     series: [{
+//         name: 'Stretch Upload',
+//         connectNulls: true,
+//         data: [10,null,null,12,16,20,25,30,null,null,36,43,52,60,70,null,null,77,86,97,108,120,null,null,130,142,155,170,185,null,null,196,204,212,212,212],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }, {
+//         name: 'Min Upload',
+//         connectNulls: true,
+//         data: [8,null,null,9,11,14,17,20,null,null,23,27,32,36,43,null,null,47,52,57,62,68,null,null,74,80,87,93,100,null,null,106,112,112,112,112],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }, {
+//         name: 'Current Upload',
+//         connectNulls: true,
+//         data: [],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }, {
+//         name: 'Strech sign-off',
+//         connectNulls: true,
+//         data: [0,null,null,3,7,11,15,20,null,null,25,30,36,43,50,null,null,56,63,71,80,90,null,null,100,111,124,137,150,null,null,162,175,187,200,212],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }, {
+//         name: 'Min sign-off',
+//         connectNulls: true,
+//         data: [0,null,null,1,4,6,8,12,null,null,13,15,19,22,26,null,null,29,32,36,40,45,null,null,49,53,58,64,70,null,null,78,87,100,112,112],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }, {
+//         name: 'Current sign-off',
+//         connectNulls: true,
+//         data: [],
+//         pointStart: Date.UTC(2017, 5, 9),
+//         pointInterval: 24 * 3600 * 1000 // one day
+//     }]
+
+// });
 </script>

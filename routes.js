@@ -38,6 +38,19 @@ const getLabels = cards => {
 
 }
 
+const getPeople = cards => {
+
+  return cards.map(card => {
+    card.people = [];
+    for (let x = 0; x < card.idMembers.length; x++) {
+      let person = config.members.find(item => card.idMembers[x] == item.id ) || null;
+      if (person) {
+        card.people.push(person);
+      }
+    }
+  })
+}
+
 const routes = (app, trello) => {
 
   // redirect from app
@@ -95,19 +108,23 @@ const routes = (app, trello) => {
     
     // join the two promises to handle both together
     Promise.join(cardList, listInfo, (cards, list) => {
-      // iterate therough cards to build a array of departmental counts
+      // iterate through cards to build a array of departmental counts
       let depts = {};
       getLabels(cards);
       cards.map(card => {
         card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
         let dept = card.matches[1];
-        if (dept in depts) {
-          depts[dept]++;
-        } else {
-          depts[dept] = 1;
+        if (dept) {
+          if (dept in depts) {
+            depts[dept]++;
+          } else {
+            depts[dept] = 1;
+          }          
         }
       })
+
+      cards = cards.filter(card => card.matches.length );
 
       // if a filter was applied through the url, apply to cards array
       let fcards = [];
@@ -341,87 +358,65 @@ const routes = (app, trello) => {
 
   app.get('/progress', (req, res) => {
 
-    let cards = trello.makeRequest('get', '/1/lists/58e75fd54a3c6b1c00ebdf21/cards', { fields: ['name', 'idMembers', 'due', 'url', 'labels'] }),
-        chks  = trello.makeRequest('get', '/1/boards/' + config.board + '/checklists');
+    trello.getCardsOnBoard(config.board).then(cards => {
 
-    Promise.join(cards, chks, (cards, chks) => {
+      let lists = [];
+      for (let list in config.lists) {
+        lists.push(list);
+      }
+      // only get lists 'commentary + data' -> 'uploaded'
+      lists = lists.slice(4, 10);
 
-      chks = chks.filter(chk => {
-        return (chk.name == 'Progress checklist');
-      })
+      cards = cards.filter(card => ~lists.indexOf(card.idList) && card.name.slice(0,1) == '[');
+      getLabels(cards);
+      getPeople(cards);
 
-      let lists = { backlog: [], progress: [], check: [] };
-      // attach matching checklist to card object
+      let cardLists = {
+        commentary: [],
+        content_designers: [],
+        content_design_in_progress: [],
+        sign_off: [],
+        ready_for_upload: [],
+        uploaded: []
+      }
+
+      // map through cards, putting them in new arrays based on list
       cards.map(card => {
-        card.chk = chks.find(chk => { return chk.idCard == card.id }).checkItems;
-        card.chk.sort((a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-        })
-        card.fdate = moment(card.due).format('MMM Do');
         card.matches = re.exec(card.name) || [];
+        card.list = lists[card.idList];
+        switch (card.idList) {
+          case '5942ae6eaab0cccfb006a44f':
+            cardLists.commentary.push(card);
+            break;
+          case '5942ae94a56b96427a394b25':
+            cardLists.content_designers.push(card);
+            break;
+          case '58f9e56539034820c80450ec':
+            cardLists.content_design_in_progress.push(card);
+            break;
+          case '5942aed2e2c0f17d962d32ae':
+            cardLists.sign_off.push(card);
+            break;
+          case '58f9e55459a33050d74ca18e':
+            cardLists.ready_for_upload.push(card);
+            break;
+          case '5942af4098b5900c8f261ac6':
+            cardLists.uploaded.push(card);
+            break;
+        }
+      });
 
-        if (~card.idMembers.indexOf('590b43492cb03c7eb4e116d8')) card.michael = true;
-        if (~card.idMembers.indexOf('5746bf8b473f1feca8d7dcd3')) card.laura = true;
-
-        if (card.chk[1].state == 'complete' && card.chk[5].state == 'incomplete') { 
-          card.category = 'Backlog';
-          lists.backlog.push(card);
-        };
-        if (card.chk[5].state == 'complete' && card.chk[7].state == 'incomplete') { 
-          card.category = 'In Progress';
-          lists.progress.push(card);
-        };
-        if (card.chk[7].state == 'complete' && card.chk[8].state == 'incomplete') { 
-          card.category = 'Analyst check';
-          lists.check.push(card);
-        };
-      })
-
-      getLabels(lists.backlog);
-      getLabels(lists.progress);
-      getLabels(lists.check);
-
-      res.render('progress', {
-        title: 'Commentary Progress', 
-        data: lists
-      })
+      //res.send(`<pre>${ JSON.stringify(cardLists, null, 2) }</pre>`);
+      res.render('chart', {
+        title: 'Measure Upload Progress',
+        lists: cardLists
+      })   
 
     })
 
   })
 
-  app.get('/chart', (req, res) => {
-    
-    var fs = require('fs'),
-        readline = require('readline');
-
-    var rd = readline.createInterface({
-        input: fs.createReadStream('./progress.log'),
-        //output: process.stdout,
-        console: false
-    });
-
-    rd.on('line', line => {
-      let ln = JSON.parse(line);
-      console.log(ln.message);
-    });
-
-    let uploads = trello.getCardsOnList('58e76046893294e85be058ab'),
-        signoffs = trello.getCardsOnList('58e7604e6dbfb65b96f3a1f6');
-
-    Promise.join(uploads, signoffs, (uploads, signoffs) => {
-      res.render('chart', {
-        title: 'Measure Upload Progress',
-        progress: []
-      })      
-    })
-
-
+  app.get('/test', (req, res) => {
 
   })
 
