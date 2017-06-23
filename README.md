@@ -13,6 +13,9 @@ To use
 
 Versions
 
+_0.22.0_
+Add progress carousel
+
 _0.20.0_
 Add commentary progress view
 
