@@ -9,7 +9,7 @@
   </button>
   <div class="row">
   {{#each lists }}
-    <div class="col jumbotron jumbotron-fluid">
+    <div class="col jumbotron jumbotron-fluid {{#if @first }}hilite{{/if }}">
       <h2 class="display-3">{{ this.length }}</h2>
       <p class="lead">{{ @key }}</p>
     </div>
