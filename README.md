@@ -13,6 +13,9 @@ To use
 
 Versions
 
+_0.23.0_
+Add media queries to scale jumbotron headers
+
 _0.22.0_
 Add progress carousel
 
