@@ -9,7 +9,7 @@
   </button>
   <div class="row">
   {{#each lists }}
-    <div class="col jumbotron jumbotron-fluid {{#if @first }}hilite{{/if }}">
+    <div class="col-2 jumbotron jumbotron-fluid {{#if @first }}hilite{{/if }}">
       <h2 class="display-3">{{ this.length }}</h2>
       <p class="lead">{{ @key }}</p>
     </div>
@@ -37,7 +37,15 @@
             {{#each this }}
             <tr>
               <td><a href="{{ url }}" target="_blank">{{ matches.[1] }} {{ matches.[2] }}</a></td>
-              <td>{{ matches.[3] }}</td>
+              <td>
+              {{ matches.[3] }}
+                {{#if geog }}<span class="badge badge-info">{{ geog }}</span>{{/if }} 
+                {{#if pub }}<span class="badge badge-danger">unpub</span> {{/if }}
+                {{#if lab }}<span style="background-color: black;" class="badge">{{ lab }}</span> {{/if }}
+                {{#if ons }}<span style="background-color: orange;" class="badge">{{ ons }}</span> {{/if }}
+                {{#if onspop }}<span style="background-color: #ff80ce;" class="badge">{{ onspop }}</span> {{/if }}
+                {{#if pri }}<span style="background-color: lime;" class="badge">A</span>{{/if }}
+              </td>
               <td>
                 {{#each people }}
                 {{#if url }}
