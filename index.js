@@ -63,7 +63,7 @@ cron.schedule('0 1 * * *', () => {
   
 });
 
-app.locals.lists = config.lists;
+app.locals.list = config.lists;
 app.locals.deptList = config.deptList;
 app.locals.checklist = config.checklist;
 

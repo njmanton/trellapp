@@ -22,7 +22,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/" id="navListsDD" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Lists</a>
             <div class="dropdown-menu" aria-labelledby="navListsDD">
-              {{#each lists }}
+              {{#each list }}
               <a href="/list/{{ @key }}" class="dropdown-item">{{ this }}</a>
               {{/each }}
             </div>
