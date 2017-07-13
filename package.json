@@ -3,7 +3,7 @@
   "version": "0.23.2",
   "description": "get stuff from Trello API",
   "engines": {
-    "node": "7.10.0"
+    "node": "7.10.1"
   },
   "main": "index.js",
   "repository": {
