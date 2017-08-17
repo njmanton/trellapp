@@ -15,6 +15,7 @@ exports.lists = {
   "5942aed2e2c0f17d962d32ae": "Needs senior analyst sign off",
   "58f9e55459a33050d74ca18e": "Ready for upload",
   "5942af4098b5900c8f261ac6": "Uploaded",
+  "59831605e4134db75644ce86": "Ready to be sent for Approvals",
   "58e76046893294e85be058ab": "Departmental sign off",
   "58e7604e6dbfb65b96f3a1f6": "Ready for publication",
   "58e760678a0bb7b145c27abb": "Published",

@@ -364,8 +364,8 @@ const routes = (app, trello) => {
       for (let list in config.lists) {
         lists.push(list);
       }
-      // only get lists 'commentary + data' -> 'uploaded'
-      lists = lists.slice(4, 10);
+      // only get lists 'commentary + data' -> 'ready for approval'
+      lists = lists.slice(4, 11);
 
       cards = cards.filter(card => ~lists.indexOf(card.idList) && card.name.slice(0,1) == '[');
       getLabels(cards);
@@ -401,6 +401,7 @@ const routes = (app, trello) => {
             cardLists.ready_for_upload.push(card);
             break;
           case '5942af4098b5900c8f261ac6':
+          case '59831605e4134db75644ce86':          
             cardLists.uploaded.push(card);
             break;
         }
