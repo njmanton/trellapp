@@ -418,7 +418,10 @@ const routes = (app, trello) => {
   })
 
   app.get('/test', (req, res) => {
-
+    trello.getCardsOnList('58f9e56539034820c80450ec').then(cards => {
+      //console.log(members);
+      res.send(`<pre>${ JSON.stringify(cards, null, 2) }</pre>`);
+    })
   })
 
 

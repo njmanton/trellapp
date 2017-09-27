@@ -67,9 +67,44 @@ exports.members = [{
     'url': '',
     'initials': 'KS'
   }, {
-    "id": "56e9b77362fb98316a840e70",
-    "fullName": "Laith Al-Kaisy",
-    'url': '383a8fe7204fe8e85c224445962f64e7'
+    "id": "59ae85d8fbcee31fcca69f61",
+    "fullName": "Howard Gossington",
+    'url': 'd3b3a3bf503d6dfb4a53466ce9f9c5cc',
+    'initials': 'HG'
+  }, {
+    "id": "59ae75b51a753d46ec021440",
+    "fullName": "Amaani Hoddoon",
+    "url": '',
+    'initials': 'AH'
+  }, {
+    "id": "59a561edb606b4eb55c848fe",
+    "fullName": "Lual Santiago",
+    "url": '',
+    'initials': 'LS'
+  }, {
+    "id": "59afc2698fec7b95eeabc7d2",
+    "fullName": "Baljinder Virk",
+    "url": '',
+    'initials': 'BV'
+  }, {
+    "id": "599abdce1762c95ab02088cd",
+    "fullName": "Richard Laux",
+    "url": '',
+    'initials': 'RL'
+  }, {
+    "id": "598986e7e064e335ef0b0a78",
+    "fullName": "Emma Nelson",
+    "url": '',
+    'initials': 'EN'
+  }, {
+    "id": "59c8d44c966dcb06f46a4884",
+    "fullName": "Spencer Ball",
+    "url": 'b5cd7b978aae8044972e2ccf2cb41eb3'
+  }, {
+    "id": "59c24900d967616391816484",
+    "fullName": "Liz Goad",
+    "url": '',
+    'initials': 'LG'
   }, {
     "id": "5746bf8b473f1feca8d7dcd3",
     "fullName": "Laura Tennant",
