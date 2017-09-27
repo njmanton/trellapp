@@ -18,7 +18,7 @@ exports.lists = {
   "59831605e4134db75644ce86": "Ready to be sent for Approvals",
   "58e76046893294e85be058ab": "Departmental sign off",
   "58e7604e6dbfb65b96f3a1f6": "Ready for publication",
-  "58e760678a0bb7b145c27abb": "Published",
+  "58e760678a0bb7b145c27abb": "Published"
 };
 
 exports.deptList = ['DH', 'DWP', 'DCMS', 'DCLG', 'HO', 'MoJ', 'MOD', 'DfT', 'BEIS', 'CO', 'DEFRA', 'DfE', 'RDU'];
@@ -26,10 +26,6 @@ exports.deptList = ['DH', 'DWP', 'DCMS', 'DCLG', 'HO', 'MoJ', 'MOD', 'DfT', 'BEI
 exports.checklist = ['Data received', 'Commentary received', 'Metadata received', 'Data checked', 'Commentary checked', 'Metadata checked', 'Headline provided', 'Working headline'];
 
 exports.members = [{
-    "id": "591063a667496d0fd0218be3",
-    "fullName": "An Nguyen",
-    'url': 'db015cca5b918b992951aef81b189c4a'
-  }, {
     "id": "5832cf200c86446b64868157",
     "fullName": "Baljit Gill",
     'url': '',
@@ -42,16 +38,6 @@ exports.members = [{
     "id": "5874e39c0dd8d4f5355e8cae",
     "fullName": "Gabe Kite",
     'url': '55a277893b9ec8e72d6aa1d902d12c09'
-  }, {
-    "id": "58aaf47a9628703355321414",
-    "fullName": "Geeta Kerai",
-    'url': '',
-    'iniitals': 'GK'
-  }, {
-    "id": "54fc4b7a1c61f606cec3f13b",
-    "fullName": "Gemma",
-    'url': '',
-    'initials': 'GP'
   }, {
     "id": "587f64c2806f2e4c7a739716",
     "fullName": "John Connell",
@@ -136,10 +122,6 @@ exports.members = [{
     "fullName": "Rachel Beardsmore",
     'url': '',
     'initials': 'RB'
-  }, {
-    "id": "5731fa5aab85a8aedad5bc3a",
-    "fullName": "Rose Mortada",
-    'url': '79dd69222fa024a030bd2605fda2964e'
   }, {
     "id": "57a05a6bd0bff424849b4870",
     "fullName": "Tom Ridd",

@@ -365,8 +365,9 @@ const routes = (app, trello) => {
         lists.push(list);
       }
       // only get lists 'commentary + data' -> 'ready for approval'
-      lists = lists.slice(4, 11);
+      lists = lists.slice(4, 14);
 
+      // filter cards and exclude 'instruction' cards that begin with a left square bracket
       cards = cards.filter(card => ~lists.indexOf(card.idList) && card.name.slice(0,1) == '[');
       getLabels(cards);
       getPeople(cards);
@@ -377,7 +378,9 @@ const routes = (app, trello) => {
         content_design_in_progress: [],
         sign_off: [],
         ready_for_upload: [],
-        uploaded: []
+        uploaded: [],
+        sent: [],
+        published: []
       }
 
       // map through cards, putting them in new arrays based on list
@@ -404,6 +407,12 @@ const routes = (app, trello) => {
           case '59831605e4134db75644ce86':          
             cardLists.uploaded.push(card);
             break;
+          case '58e76046893294e85be058ab':
+            cardLists.sent.push(card);
+            break;
+          case '58e7604e6dbfb65b96f3a1f6':
+            cardLists.published.push(card);
+            break;
         }
       });
 
@@ -418,10 +427,7 @@ const routes = (app, trello) => {
   })
 
   app.get('/test', (req, res) => {
-    trello.getCardsOnList('58f9e56539034820c80450ec').then(cards => {
-      //console.log(members);
-      res.send(`<pre>${ JSON.stringify(cards, null, 2) }</pre>`);
-    })
+
   })
 
 
