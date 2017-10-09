@@ -65,7 +65,7 @@ exports.members = [{
   }, {
     "id": "59a561edb606b4eb55c848fe",
     "fullName": "Lual Santiago",
-    "url": '',
+    "url": '6b5a6d9296ea601222baa4f6ba93bb94',
     'initials': 'LS'
   }, {
     "id": "59afc2698fec7b95eeabc7d2",
