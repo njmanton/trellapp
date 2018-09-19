@@ -1,3 +1,5 @@
+# NO LONGER USED; NEW VERSION IS INTEGRATED INTO rd_cms
+
 # trellapp
 
 ## get stuff from the Trello API
